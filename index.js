@@ -35,6 +35,9 @@ app.get('/finders', userCtrl.finderUser)
 
 app.get('/get-set-virtual', userCtrl.getSetVirtual)
 
+
+app.get('/validate', userCtrl.validateUser)
+
 // User.sync({force: true})
 // User.drop()
 

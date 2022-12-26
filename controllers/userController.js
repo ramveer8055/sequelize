@@ -169,6 +169,37 @@ const getSetVirtual = async (req, res) => {
     })
 }
 
+
+const validateUser = async (req, res) => {
+    var user = {}
+    var messages = {}
+    try {
+        user = await User.create({ firstName: "m2", lastName: "Chauhan" })
+    } catch (e) {
+        let message
+        e.errors.forEach(error => {
+            switch (error.validatorKey) {
+                case 'isAlpha':
+                    message = error.message
+                    break;
+                case 'isLowercase':
+                    message = 'Only lower case allow'
+                    break;
+                case 'len':
+                    message = 'please minimum 2 character and maximum 10'
+                    break;
+
+            }
+            messages[error.path] = message
+        });
+
+    }
+    res.status(200).json({
+        data: user,
+        messages: messages
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -178,5 +209,6 @@ module.exports = {
     patchUser,
     queryUser,
     finderUser,
-    getSetVirtual
+    getSetVirtual,
+    validateUser
 }

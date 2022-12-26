@@ -8,6 +8,14 @@ module.exports = (sequelize, DataTypes, Model) => {
         firstName: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
+            validate:{
+                isAlpha: {
+                    msg: "Only alphabet allowed"
+                },  
+                isLowercase: true,
+                len: [2, 10],
+            },
             get() {
                 const rawValue = this.getDataValue('firstName');
                 return rawValue ? rawValue.toUpperCase() : null;
