@@ -29,6 +29,9 @@ app.patch('/user/:id', userCtrl.patchUser)
 
 app.get('/query', userCtrl.queryUser)
 
+
+app.get('/finders', userCtrl.finderUSer)
+
 // User.sync({force: true})
 // User.drop()
 

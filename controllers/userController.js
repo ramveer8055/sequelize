@@ -127,10 +127,35 @@ const queryUser = async (req, res) => {
 
     //count direct
     const user = await User.count({
-        
+
     })
     res.status(200).json({
         data: user
+    })
+}
+
+
+const finderUSer = async (req, res) => {
+    //-----find by Primary key-----------------
+    // const user = await User.findByPk(20)
+
+    //------find or create------------
+    // const [user, created] = await User.findOrCreate({
+    //     where: { firstName: 'Monu' },
+    //     defaults: {
+    //         lastName: 'Khare'
+    //     }
+    // });
+
+    //------find and count all-------------
+    const { count, rows } = await User.findAndCountAll({
+        where: {
+            lastName: 'Chauhan'
+        }
+    });
+    res.status(200).json({
+        data: rows,
+        count: count
     })
 }
 
@@ -141,5 +166,6 @@ module.exports = {
     postUser,
     deleteUser,
     patchUser,
-    queryUser
+    queryUser,
+    finderUSer
 }
