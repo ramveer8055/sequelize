@@ -7,11 +7,29 @@ module.exports = (sequelize, DataTypes, Model) => {
         // Model attributes are defined here
         firstName: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            get() {
+                const rawValue = this.getDataValue('firstName');
+                return rawValue ? rawValue.toUpperCase() : null;
+            }
         },
         lastName: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            set(value) {
+                // Storing passwords in plaintext in the database is terrible.
+                // Hashing the value with an appropriate cryptographic hash function is better.
+                this.setDataValue('lastName', value + ", Indian");
+            }
             // allowNull defaults to true
+        },
+        fullName: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return `${this.firstName} ${this.lastName}`;
+            },
+            set(value) {
+                throw new Error('Do not try to set the `fullName` value!');
+            }
         }
     }, {
         // Other model options go here

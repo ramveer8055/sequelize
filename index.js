@@ -30,7 +30,10 @@ app.patch('/user/:id', userCtrl.patchUser)
 app.get('/query', userCtrl.queryUser)
 
 
-app.get('/finders', userCtrl.finderUSer)
+app.get('/finders', userCtrl.finderUser)
+
+
+app.get('/get-set-virtual', userCtrl.getSetVirtual)
 
 // User.sync({force: true})
 // User.drop()

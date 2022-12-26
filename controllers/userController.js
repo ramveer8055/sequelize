@@ -135,7 +135,7 @@ const queryUser = async (req, res) => {
 }
 
 
-const finderUSer = async (req, res) => {
+const finderUser = async (req, res) => {
     //-----find by Primary key-----------------
     // const user = await User.findByPk(20)
 
@@ -159,6 +159,16 @@ const finderUSer = async (req, res) => {
     })
 }
 
+
+const getSetVirtual = async (req, res) => {
+    const user = await User.findAll()
+    // const user = await User.create({firstName: "Ram", lastName: "Chauhan"})
+    res.status(200).json({
+        status: true,
+        data: user
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -167,5 +177,6 @@ module.exports = {
     deleteUser,
     patchUser,
     queryUser,
-    finderUSer
+    finderUser,
+    getSetVirtual
 }
