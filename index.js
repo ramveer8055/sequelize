@@ -42,6 +42,9 @@ app.get('/raw-queries', userCtrl.rawQueries)
 
 app.get('/one-to-one', userCtrl.oneToOneUser)
 
+
+app.get('/one-to-many', userCtrl.oneToManyUser)
+
 // User.sync({force: true})
 // User.drop()
 

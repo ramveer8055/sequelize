@@ -262,7 +262,7 @@ const rawQueries = async (req, res) => {
     })
 }
 
-const oneToOneUser = async(req,res)=>{
+const oneToOneUser = async (req, res) => {
     // const user = await User.create({ firstName: 'ram', lastName: 'singh' })
     // if(user && user.id){
     //     await Contact.create({ permanent_address: 'fgh', current_address :'jkl', user_id: user.id})
@@ -271,10 +271,10 @@ const oneToOneUser = async(req,res)=>{
     // const users = await User.findAll({
     //     attributes:['firstName','lastName'],
     //     include: {
-            
+
     //         model: Contact,
     //         attributes: ['permanent_address', 'current_address'],
-            
+
     //     },
     //     where:{
     //         id: 1
@@ -282,7 +282,7 @@ const oneToOneUser = async(req,res)=>{
     // })
 
     const contact = await Contact.findAll({
-        attributes: ['permanent_address','current_address'],
+        attributes: ['permanent_address', 'current_address'],
         include: {
             model: User,
             attributes: ['firstName', 'lastName']
@@ -291,6 +291,30 @@ const oneToOneUser = async(req,res)=>{
     res.status(200).json({
         status: true,
         data: contact
+    })
+}
+
+const oneToManyUser = async (req, res) => {
+
+    // const contact = await Contact.create({ permanent_address: 'Tes', current_address: 'test', user_id: 2 })
+
+    //--------One To Many-----------------
+    // const users = await User.findAll({
+    //     attributes: ['id', 'firstName','lastName'],
+    //     include:{
+    //         model: Contact,
+    //         attributes: ['id','current_address']
+    //     }
+    // })  
+
+    //-------belongsTo-----------------
+    const users = await Contact.findAll({
+        include: User
+    })
+
+    res.status(200).json({
+        status: true,
+        data: users
     })
 }
 
@@ -306,5 +330,6 @@ module.exports = {
     getSetVirtual,
     validateUser,
     rawQueries,
-    oneToOneUser
+    oneToOneUser,
+    oneToManyUser
 }

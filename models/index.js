@@ -23,8 +23,14 @@ db.users = require('./user')(sequelize, DataTypes, Model)
 db.contacts = require('./contact')(sequelize, DataTypes)
 
 
-db.users.hasOne(db.contacts);  //{ foreignKey: 'user_id', as: 'contact_detials' } as always work on define foreignKey
-db.contacts.belongsTo(db.users);
+//----------One To One--------------
+// db.users.hasOne(db.contacts);  //{ foreignKey: 'user_id', as: 'contact_detials' } as always work on define foreignKey
+// db.contacts.belongsTo(db.users);
+
+
+//---------One To Many--------------
+db.users.hasMany(db.contacts);
+db.contacts.belongsTo(db.users)
 
 db.sequelize.sync({ force: false })
 
