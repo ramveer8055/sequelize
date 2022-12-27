@@ -40,6 +40,8 @@ app.get('/validate', userCtrl.validateUser)
 
 app.get('/raw-queries', userCtrl.rawQueries)
 
+app.get('/one-to-one', userCtrl.oneToOneUser)
+
 // User.sync({force: true})
 // User.drop()
 

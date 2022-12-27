@@ -1,6 +1,7 @@
 const db = require('../models')
 const { Sequelize, Op, QueryTypes } = require('sequelize')
 const User = db.users;
+const Contact = db.contacts
 const addUser = async (req, res) => {
     const jane = await User.create({ firstName: "Jane" });
     console.log(jane instanceof User); // true
@@ -261,6 +262,38 @@ const rawQueries = async (req, res) => {
     })
 }
 
+const oneToOneUser = async(req,res)=>{
+    // const user = await User.create({ firstName: 'ram', lastName: 'singh' })
+    // if(user && user.id){
+    //     await Contact.create({ permanent_address: 'fgh', current_address :'jkl', user_id: user.id})
+    // }
+
+    // const users = await User.findAll({
+    //     attributes:['firstName','lastName'],
+    //     include: {
+            
+    //         model: Contact,
+    //         attributes: ['permanent_address', 'current_address'],
+            
+    //     },
+    //     where:{
+    //         id: 1
+    //     }
+    // })
+
+    const contact = await Contact.findAll({
+        attributes: ['permanent_address','current_address'],
+        include: {
+            model: User,
+            attributes: ['firstName', 'lastName']
+        }
+    })
+    res.status(200).json({
+        status: true,
+        data: contact
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -272,5 +305,6 @@ module.exports = {
     finderUser,
     getSetVirtual,
     validateUser,
-    rawQueries
+    rawQueries,
+    oneToOneUser
 }
