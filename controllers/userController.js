@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Sequelize, Op } = require('sequelize')
+const { Sequelize, Op, QueryTypes } = require('sequelize')
 const User = db.users;
 const addUser = async (req, res) => {
     const jane = await User.create({ firstName: "Jane" });
@@ -200,6 +200,67 @@ const validateUser = async (req, res) => {
     })
 }
 
+
+const rawQueries = async (req, res) => {
+
+    // const users = await db.sequelize.query("SELECT * FROM `Users`", { 
+    //     type: QueryTypes.SELECT,
+    //     model:User,
+    //     plain: true,
+    // });
+    // We didn't need to destructure the result here - the results were returned directly
+
+
+    //------------------Replacements-------------------
+
+    // const users = await db.sequelize.query(
+    //     'SELECT * FROM Users WHERE id = ?',
+    //     {
+    //         replacements: [1],
+    //         type: QueryTypes.SELECT
+    //     }
+    // );
+
+
+    // const users = await db.sequelize.query(
+    //     'SELECT * FROM Users WHERE firstName = :firstName',
+    //     {
+    //         replacements: { firstName: 'Manpreet' },
+    //         type: QueryTypes.SELECT
+    //     }
+    // );
+
+    // const users = await db.sequelize.query(
+    //     'SELECT * FROM Users WHERE firstName IN(:firstName)',
+    //     {
+    //         replacements: { firstName: ['Manpreet', 'Ram'] },
+    //         type: QueryTypes.SELECT
+    //     }
+    // );
+
+
+    //-----------Like----------------------------
+    // const users = await db.sequelize.query(
+    //     'SELECT * FROM Users WHERE firstName LIKE :search_name',
+    //     {
+    //         replacements: { search_name: 'Ra%' },
+    //         type: QueryTypes.SELECT
+    //     }
+    // );
+
+    const users = await db.sequelize.query(
+        'SELECT * FROM Users WHERE id=$id',
+        {
+            bind: { id: 1 },
+            type: QueryTypes.SELECT
+        }
+    );
+    res.status(200).json({
+        status: true,
+        data: users
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -210,5 +271,6 @@ module.exports = {
     queryUser,
     finderUser,
     getSetVirtual,
-    validateUser
+    validateUser,
+    rawQueries
 }

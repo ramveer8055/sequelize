@@ -38,6 +38,8 @@ app.get('/get-set-virtual', userCtrl.getSetVirtual)
 
 app.get('/validate', userCtrl.validateUser)
 
+app.get('/raw-queries', userCtrl.rawQueries)
+
 // User.sync({force: true})
 // User.drop()
 
