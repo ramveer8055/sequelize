@@ -334,6 +334,42 @@ const manyToManyUser = async (req, res) => {
     })
 }
 
+const paranoidUser = async(req, res)=>{
+
+    // const users = await User.create({
+    //     first_name: "jjlkkjlml",
+    //     last_name: "test"
+    // })
+
+    // const users = await User.destroy({
+    //     where:{
+    //         id: 4
+    //     },
+    //     // force: true //hard delete
+    // })
+
+    // const users = await User.restore({
+    //     where: {
+    //         id: 2
+    //     }
+    // })
+
+
+    // const users = await User.findAll({
+    //     paranoid:false
+    // })
+    
+
+    const users = await User.findByPk(2,{
+        paranoid: false
+    })
+
+    res.status(200).json({
+        status: true,
+        data: users
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -348,5 +384,6 @@ module.exports = {
     rawQueries,
     oneToOneUser,
     oneToManyUser,
-    manyToManyUser
+    manyToManyUser,
+    paranoidUser
 }

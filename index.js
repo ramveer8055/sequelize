@@ -47,6 +47,9 @@ app.get('/one-to-many', userCtrl.oneToManyUser)
 
 app.get('/many-to-many', userCtrl.manyToManyUser)
 
+
+app.get('/paranoid', userCtrl.paranoidUser)
+
 // User.sync({force: true})
 // User.drop()
 

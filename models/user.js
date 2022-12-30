@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes, Model) => {
 
     User.init({
         // Model attributes are defined here
-        firstName: {
+        first_name: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
@@ -17,23 +17,23 @@ module.exports = (sequelize, DataTypes, Model) => {
                 len: [2, 10],
             },
             get() {
-                const rawValue = this.getDataValue('firstName');
+                const rawValue = this.getDataValue('first_name');
                 return rawValue ? rawValue.toUpperCase() : null;
             }
         },
-        lastName: {
+        last_name: {
             type: DataTypes.STRING,
             set(value) {
                 // Storing passwords in plaintext in the database is terrible.
                 // Hashing the value with an appropriate cryptographic hash function is better.
-                this.setDataValue('lastName', value + ", Indian");
+                this.setDataValue('last_name', value + ", Indian");
             }
             // allowNull defaults to true
         },
         fullName: {
             type: DataTypes.VIRTUAL,
             get() {
-                return `${this.firstName} ${this.lastName}`;
+                return `${this.first_name} ${this.last_name}`;
             },
             set(value) {
                 throw new Error('Do not try to set the `fullName` value!');
@@ -43,7 +43,8 @@ module.exports = (sequelize, DataTypes, Model) => {
         // Other model options go here
         sequelize, // We need to pass the connection instance
         modelName: 'User', // We need to choose the model name
-        underscored: true
+        underscored: true,
+        paranoid: true,
     });
 
     // the defined model is the class itself
@@ -58,11 +59,11 @@ module.exports = (sequelize, DataTypes, Model) => {
 
     // const User = sequelize.define('User', {
     //     // Model attributes are defined here
-    //     firstName: {
+    //     first_name: {
     //         type: DataTypes.STRING,
     //         allowNull: false
     //     },
-    //     lastName: {
+    //     last_name: {
     //         type: DataTypes.STRING,
     //         defaultValue: 'Singh'
     //         // allowNull defaults to true
