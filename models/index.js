@@ -21,6 +21,7 @@ db.sequelize = sequelize
 
 db.users = require('./user')(sequelize, DataTypes, Model)
 db.contacts = require('./contact')(sequelize, DataTypes)
+db.usercontacts = require('./userContacts')(sequelize, DataTypes, db.users, db.contacts)
 
 
 //----------One To One--------------
@@ -29,8 +30,18 @@ db.contacts = require('./contact')(sequelize, DataTypes)
 
 
 //---------One To Many--------------
-db.users.hasMany(db.contacts);
-db.contacts.belongsTo(db.users)
+// db.users.hasMany(db.contacts);
+// db.contacts.belongsTo(db.users)
+
+
+//------------Many To Many-----------------
+// db.users.belongsToMany(db.contacts,{through: 'user_contacts'});
+// db.contacts.belongsToMany(db.users, { through: 'user_contacts' });
+
+
+//------------Many To Many-----------------
+db.users.belongsToMany(db.contacts, { through: db.usercontacts });
+db.contacts.belongsToMany(db.users, { through: db.usercontacts });
 
 db.sequelize.sync({ force: false })
 

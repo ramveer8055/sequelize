@@ -45,6 +45,8 @@ app.get('/one-to-one', userCtrl.oneToOneUser)
 
 app.get('/one-to-many', userCtrl.oneToManyUser)
 
+app.get('/many-to-many', userCtrl.manyToManyUser)
+
 // User.sync({force: true})
 // User.drop()
 

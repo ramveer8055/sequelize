@@ -318,6 +318,22 @@ const oneToManyUser = async (req, res) => {
     })
 }
 
+const manyToManyUser = async (req, res) => {
+    const users = await Contact.findAll({
+        include: User
+    })
+
+
+    // const users = await User.findAll({
+    //     include: Contact
+    // })
+
+    res.status(200).json({
+        status: true,
+        data: users
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -331,5 +347,6 @@ module.exports = {
     validateUser,
     rawQueries,
     oneToOneUser,
-    oneToManyUser
+    oneToManyUser,
+    manyToManyUser
 }
