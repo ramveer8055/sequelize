@@ -31,8 +31,8 @@ db.educations = require('./education')(sequelize, DataTypes)
 
 
 //---------One To Many--------------
-db.users.hasMany(db.contacts);
-db.contacts.belongsTo(db.users)
+db.users.hasMany(db.contacts, { foreignkey: 'user_id'});
+db.contactUser = db.contacts.belongsTo(db.users, { foreignKey: 'user_id', as: 'users'})
 
 
 //------------Many To Many-----------------

@@ -54,6 +54,8 @@ app.get('/loading', userCtrl.loadingUser)
 
 app.get('/eagerUser', userCtrl.eagerUser)
 
+app.get('/creatorUser', userCtrl.creatorUser)
+
 // User.sync({force: true})
 // User.drop()
 

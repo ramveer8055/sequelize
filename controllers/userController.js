@@ -335,7 +335,7 @@ const manyToManyUser = async (req, res) => {
     })
 }
 
-const paranoidUser = async(req, res)=>{
+const paranoidUser = async (req, res) => {
 
     // const users = await User.create({
     //     first_name: "jjlkkjlml",
@@ -359,9 +359,9 @@ const paranoidUser = async(req, res)=>{
     // const users = await User.findAll({
     //     paranoid:false
     // })
-    
 
-    const users = await User.findByPk(2,{
+
+    const users = await User.findByPk(2, {
         paranoid: false
     })
 
@@ -371,15 +371,15 @@ const paranoidUser = async(req, res)=>{
     })
 }
 
-const loadingUser = async(req, res)=>{
+const loadingUser = async (req, res) => {
     // const user = await User.create({ first_name: 'hello', last_name: 'singh' })
     // if(user && user.id){
     //     await Contact.create({ permanent_address: 'fgh', current_address :'jkl', user_id: user.id})
     // }
 
     const user = await User.findAll({
-        where:{
-            id:2
+        where: {
+            id: 2
         },
 
     })
@@ -390,7 +390,7 @@ const loadingUser = async(req, res)=>{
     })
 }
 
-const eagerUser = async(req, res)=>{
+const eagerUser = async (req, res) => {
     const user = await User.findAll({
 
         //---------Multiple Join--------------
@@ -404,7 +404,7 @@ const eagerUser = async(req, res)=>{
         //     required: true
         // }]
 
-        
+
         //-----Multiple Join-----------
         // include:{all:true}
 
@@ -418,6 +418,48 @@ const eagerUser = async(req, res)=>{
 
         //-------Nested Join-----------------
         include: { all: true, nested: true }
+    })
+    res.status(200).json({
+        status: true,
+        data: user
+    })
+}
+
+const creatorUser = async (req, res) => {
+    // const user = await User.create({ first_name: 'hello', last_name: 'singh' })
+    // if (user && user.id) {
+    //     await Contact.create({ permanent_address: 'fgh', current_address: 'jkl', user_id: user.id })
+    // }
+
+
+    // const user = await Contact.create({
+    //     permanent_address: 'hapur',
+    //     current_address: 'jamesdpur',
+    //     users: {
+    //         first_name: 'oo',
+    //         last_name: 'dev'
+    //     }
+    // }, {
+    //     include: [db.contactUser]
+    // })
+
+    //-------------BulkCreate-------------
+    const user = await Contact.bulkCreate([{
+        permanent_address: 'hapur',
+        current_address: 'jamesdpur',
+        users: {
+            first_name: 'oo',
+            last_name: 'dev'
+        }
+    }, {
+        permanent_address: 'hapur',
+        current_address: 'jamesdpur',
+        users: {
+            first_name: 'ooo',
+            last_name: 'dev'
+        }
+    }], {
+        include: [db.contactUser]
     })
     res.status(200).json({
         status: true,
@@ -442,5 +484,6 @@ module.exports = {
     manyToManyUser,
     paranoidUser,
     loadingUser,
-    eagerUser
+    eagerUser,
+    creatorUser
 }
