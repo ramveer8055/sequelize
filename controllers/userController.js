@@ -2,6 +2,7 @@ const db = require('../models')
 const { Sequelize, Op, QueryTypes } = require('sequelize')
 const User = db.users;
 const Contact = db.contacts
+const Education = db.educations
 const addUser = async (req, res) => {
     const jane = await User.create({ firstName: "Jane" });
     console.log(jane instanceof User); // true
@@ -389,6 +390,41 @@ const loadingUser = async(req, res)=>{
     })
 }
 
+const eagerUser = async(req, res)=>{
+    const user = await User.findAll({
+
+        //---------Multiple Join--------------
+        // include: [{
+        //     model: Contact,
+        //     // right: true,
+        //     required: true
+        // },{
+        //     model: Education,
+        //     // right: true,
+        //     required: true
+        // }]
+
+        
+        //-----Multiple Join-----------
+        // include:{all:true}
+
+        //-----------Nested Join------------
+        // include:{
+        //     model: Contact,
+        //     include:{
+        //         model: Education
+        //     }
+        // }
+
+        //-------Nested Join-----------------
+        include: { all: true, nested: true }
+    })
+    res.status(200).json({
+        status: true,
+        data: user
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -405,5 +441,6 @@ module.exports = {
     oneToManyUser,
     manyToManyUser,
     paranoidUser,
-    loadingUser
+    loadingUser,
+    eagerUser
 }

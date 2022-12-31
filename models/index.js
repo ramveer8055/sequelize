@@ -4,7 +4,7 @@ const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = new Sequelize('testDB', 'root', 'admin@123', {
     host: 'localhost',
     dialect: 'mysql' /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
-    logging: false
+    // logging: false
 });
 
 
@@ -22,6 +22,7 @@ db.sequelize = sequelize
 db.users = require('./user')(sequelize, DataTypes, Model)
 db.contacts = require('./contact')(sequelize, DataTypes)
 db.usercontacts = require('./userContacts')(sequelize, DataTypes, db.users, db.contacts)
+db.educations = require('./education')(sequelize, DataTypes)
 
 
 //----------One To One--------------
@@ -42,6 +43,10 @@ db.contacts.belongsTo(db.users)
 //------------Many To Many-----------------
 // db.users.belongsToMany(db.contacts, { through: db.usercontacts });
 // db.contacts.belongsToMany(db.users, { through: db.usercontacts });
+
+
+db.contacts.hasMany(db.educations)
+db.educations.belongsTo(db.contacts)
 
 // db.sequelize.sync({ force: true })
 

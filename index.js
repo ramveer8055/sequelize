@@ -52,6 +52,8 @@ app.get('/paranoid', userCtrl.paranoidUser)
 
 app.get('/loading', userCtrl.loadingUser)
 
+app.get('/eagerUser', userCtrl.eagerUser)
+
 // User.sync({force: true})
 // User.drop()
 
