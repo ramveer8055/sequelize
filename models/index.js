@@ -30,8 +30,8 @@ db.usercontacts = require('./userContacts')(sequelize, DataTypes, db.users, db.c
 
 
 //---------One To Many--------------
-// db.users.hasMany(db.contacts);
-// db.contacts.belongsTo(db.users)
+db.users.hasMany(db.contacts);
+db.contacts.belongsTo(db.users)
 
 
 //------------Many To Many-----------------
@@ -40,8 +40,8 @@ db.usercontacts = require('./userContacts')(sequelize, DataTypes, db.users, db.c
 
 
 //------------Many To Many-----------------
-db.users.belongsToMany(db.contacts, { through: db.usercontacts });
-db.contacts.belongsToMany(db.users, { through: db.usercontacts });
+// db.users.belongsToMany(db.contacts, { through: db.usercontacts });
+// db.contacts.belongsToMany(db.users, { through: db.usercontacts });
 
 // db.sequelize.sync({ force: true })
 

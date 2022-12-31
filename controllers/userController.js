@@ -370,6 +370,25 @@ const paranoidUser = async(req, res)=>{
     })
 }
 
+const loadingUser = async(req, res)=>{
+    // const user = await User.create({ first_name: 'hello', last_name: 'singh' })
+    // if(user && user.id){
+    //     await Contact.create({ permanent_address: 'fgh', current_address :'jkl', user_id: user.id})
+    // }
+
+    const user = await User.findAll({
+        where:{
+            id:2
+        },
+
+    })
+
+    res.status(200).json({
+        status: true,
+        data: user
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -385,5 +404,6 @@ module.exports = {
     oneToOneUser,
     oneToManyUser,
     manyToManyUser,
-    paranoidUser
+    paranoidUser,
+    loadingUser
 }

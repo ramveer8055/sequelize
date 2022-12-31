@@ -50,6 +50,8 @@ app.get('/many-to-many', userCtrl.manyToManyUser)
 
 app.get('/paranoid', userCtrl.paranoidUser)
 
+app.get('/loading', userCtrl.loadingUser)
+
 // User.sync({force: true})
 // User.drop()
 
