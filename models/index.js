@@ -60,9 +60,9 @@ const Grant = sequelize.define('grant', {
         allowNull: false
     },
     self_granted: DataTypes.BOOLEAN
-}, { 
-    timestamps: false, 
-    underscored: true 
+}, {
+    timestamps: false,
+    underscored: true
 });
 
 db.grants = Grant
@@ -74,6 +74,59 @@ db.profiles.belongsToMany(db.customers, { through: Grant, uniqueKey: 'my_custom_
 // db.grants.belongsTo(db.customers);
 // db.profiles.hasMany(db.grants);
 // db.grants.belongsTo(db.profiles);
+
+
+db.players = sequelize.define('player', { username: DataTypes.STRING }, { underscored: true });
+db.teams = sequelize.define('team', { name: DataTypes.STRING }, { underscored: true });
+db.games = sequelize.define('game', { name: DataTypes.STRING }, { underscored: true });
+
+db.game_team = sequelize.define('game_team', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    game_id:{
+        type: DataTypes.INTEGER
+    },
+    team_id:{
+        type: DataTypes.INTEGER
+    }
+
+}, { underscored: true });
+db.teams.belongsToMany(db.games, { through: db.game_team });
+db.games.belongsToMany(db.teams, { through: db.game_team });
+db.game_team.belongsTo(db.games);
+db.game_team.belongsTo(db.teams);
+db.games.hasMany(db.game_team);
+db.teams.hasMany(db.game_team);
+
+
+
+// Super Many-to-Many relationship between Player and GameTeam
+db.player_game_team = sequelize.define('player_game_team', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    player_id:{
+        type: DataTypes.INTEGER,
+    },
+    game_team_id:{
+        type: DataTypes.INTEGER,
+    }
+}, { underscored: true });
+db.players.belongsToMany(db.game_team, { through: db.player_game_team });
+db.game_team.belongsToMany(db.players, { through: db.player_game_team });
+db.player_game_team.belongsTo(db.players);
+db.player_game_team.belongsTo(db.game_team);
+db.players.hasMany(db.player_game_team);
+db.game_team.hasMany(db.player_game_team);
+
+
 
 // db.sequelize.sync({ force: true })
 

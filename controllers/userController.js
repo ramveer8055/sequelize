@@ -530,6 +530,65 @@ const mNAssociationUser = async(req, res)=>{
     })
 }
 
+const m2mUser = async(req, res)=>{
+    // const players = await db.players.bulkCreate([
+    //     { username: 's0me0ne' },
+    //     { username: 'empty' },
+    //     { username: 'greenhead' },
+    //     { username: 'not_spock' },
+    //     { username: 'bowl_of_petunias' }
+    // ]);
+    // const games = await db.games.bulkCreate([
+    //     { name: 'The Big Clash' },
+    //     { name: 'Winter Showdown' },
+    //     { name: 'Summer Beatdown' }
+    // ]);
+    // const teams = await db.teams.bulkCreate([
+    //     { name: 'The Martians' },
+    //     { name: 'The Earthlings' },
+    //     { name: 'The Plutonians' }
+    // ]);
+
+    // await db.game_team.bulkCreate([
+    //     { game_id: 1, team_id: 1 },   // this GameTeam will get id 1
+    //     { game_id: 1, team_id: 2 },   // this GameTeam will get id 2
+    //     { game_id: 2, team_id: 1 },   // this GameTeam will get id 3
+    //     { game_id: 2, team_id: 3 },   // this GameTeam will get id 4
+    //     { game_id: 3, team_id: 2 },   // this GameTeam will get id 5
+    //     { game_id: 3, team_id: 3 }    // this GameTeam will get id 6
+    // ]);
+
+    // await db.player_game_team.bulkCreate([
+    //     // In 'Winter Showdown' (i.e. GameTeamIds 3 and 4):
+    //     { player_id: 1, game_team_id: 3 },   // s0me0ne played for The Martians
+    //     { player_id: 3, game_team_id: 3 },   // greenhead played for The Martians
+    //     { player_id: 4, game_team_id: 4 },   // not_spock played for The Plutonians
+    //     { player_id: 5, game_team_id: 4 }    // bowl_of_petunias played for The Plutonians
+    // ]);
+
+
+    const game = await db.games.findOne({
+        where: {
+            name: "Winter Showdown"
+        },
+        include: {
+            model: db.game_team,
+            include: [
+                {
+                    model: db.players,
+                    through: { attributes: [] } // Hide unwanted `PlayerGameTeam` nested object from results
+                },
+                db.teams
+            ]
+        }
+    });
+
+    res.status(200).json({
+        status: true,
+        data: game,  
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -549,5 +608,6 @@ module.exports = {
     loadingUser,
     eagerUser,
     creatorUser,
-    mNAssociationUser
+    mNAssociationUser,
+    m2mUser
 }
