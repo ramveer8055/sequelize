@@ -3,6 +3,9 @@ const { Sequelize, Op, QueryTypes } = require('sequelize')
 const User = db.users;
 const Contact = db.contacts
 const Education = db.educations
+const Customer = db.customers
+const Profile = db.profiles
+const Grant = db.grants
 const addUser = async (req, res) => {
     const jane = await User.create({ firstName: "Jane" });
     console.log(jane instanceof User); // true
@@ -467,6 +470,66 @@ const creatorUser = async (req, res) => {
     })
 }
 
+const mNAssociationUser = async(req, res)=>{
+    //----------------Lazy Loading-------------------------
+    // const amidala = await Customer.create({ username: 'p4dm3', points: 1000 });
+    // const queen = await Profile.create({ name: 'Queen' });
+    // await amidala.addProfile(queen, { through: { selfGranted: false } });
+    // const result = await Customer.findOne({
+    //     where: { username: 'p4dm3' },
+    //     include: Profile
+    // });
+
+    // --------------Eager Loading--------------------------
+    // const amidala = await Customer.create({
+    //     username: 'p4dm3',
+    //     points: 1000,
+    //     profiles: [{
+    //         name: 'Queen',
+    //         user_profile: {
+    //             selfGranted: true
+    //         }
+    //     }]
+    // }, {
+    //     include: Profile
+    // });
+
+    
+    //-------------Find Query-----------------
+    // const result = await Profile.findOne({
+    //     where: { name: 'Queen' },
+    //     include: Customer
+    // });
+
+    // const result = await Customer.findOne({
+    //     where: { username: 'p4dm3' },
+    //     include: Profile
+    // });
+
+    // const data = await Customer.findAll({
+    //     include: {
+    //         model: Grant,
+    //         include: Profile
+    //     }
+    // });
+
+    const data = await db.customers.findOne({
+        
+            include: {
+                model: Profile,
+                through: {
+                    attributes: ['id','self_granted']
+                }
+            }
+       
+    })
+
+    res.status(200).json({
+        status: true,
+        data: data
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -485,5 +548,6 @@ module.exports = {
     paranoidUser,
     loadingUser,
     eagerUser,
-    creatorUser
+    creatorUser,
+    mNAssociationUser
 }

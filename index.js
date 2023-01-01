@@ -56,6 +56,8 @@ app.get('/eagerUser', userCtrl.eagerUser)
 
 app.get('/creatorUser', userCtrl.creatorUser)
 
+app.get('/m-n-association', userCtrl.mNAssociationUser)
+
 // User.sync({force: true})
 // User.drop()
 

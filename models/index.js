@@ -23,6 +23,8 @@ db.users = require('./user')(sequelize, DataTypes, Model)
 db.contacts = require('./contact')(sequelize, DataTypes)
 db.usercontacts = require('./userContacts')(sequelize, DataTypes, db.users, db.contacts)
 db.educations = require('./education')(sequelize, DataTypes)
+db.customers = require('./customer')(sequelize, DataTypes)
+db.profiles = require('./profile')(sequelize, DataTypes)
 
 
 //----------One To One--------------
@@ -31,8 +33,8 @@ db.educations = require('./education')(sequelize, DataTypes)
 
 
 //---------One To Many--------------
-db.users.hasMany(db.contacts, { foreignkey: 'user_id'});
-db.contactUser = db.contacts.belongsTo(db.users, { foreignKey: 'user_id', as: 'users'})
+db.users.hasMany(db.contacts, { foreignkey: 'user_id' });
+db.contactUser = db.contacts.belongsTo(db.users, { foreignKey: 'user_id', as: 'users' })
 
 
 //------------Many To Many-----------------
@@ -47,6 +49,31 @@ db.contactUser = db.contacts.belongsTo(db.users, { foreignKey: 'user_id', as: 'u
 
 db.contacts.hasMany(db.educations)
 db.educations.belongsTo(db.contacts)
+
+
+//-------------Advanced M:N Association-----------------
+const Grant = sequelize.define('grant', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    self_granted: DataTypes.BOOLEAN
+}, { 
+    timestamps: false, 
+    underscored: true 
+});
+
+db.grants = Grant
+db.customers.belongsToMany(db.profiles, { through: Grant, uniqueKey: 'my_custom_unique' });
+db.profiles.belongsToMany(db.customers, { through: Grant, uniqueKey: 'my_custom_unique' });
+
+// Setup a One-to-Many relationship between User and Grant
+// db.customers.hasMany(db.grants);
+// db.grants.belongsTo(db.customers);
+// db.profiles.hasMany(db.grants);
+// db.grants.belongsTo(db.profiles);
 
 // db.sequelize.sync({ force: true })
 
