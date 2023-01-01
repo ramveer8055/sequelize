@@ -128,6 +128,32 @@ db.game_team.hasMany(db.player_game_team);
 
 
 
+//------------Polymorphic Associations -One to many--------------
+db.images = require('./image')(sequelize, DataTypes, Model)
+db.videos = require('./video')(sequelize, DataTypes, Model)
+db.comments = require('./comment')(sequelize, DataTypes, Model)
+
+db.images.hasMany(db.comments, {
+    foreignKey: 'comment_table_id',
+    constraints: false,
+    scope: {
+        comment_table_type: 'image'
+    }
+});
+db.comments.belongsTo(db.images, { foreignKey: 'comment_table_id', constraints: false });
+
+
+
+db.videos.hasMany(db.comments, {
+    foreignKey: 'comment_table_id',
+    constraints: false,
+    scope: {
+        comment_table_type: 'video'
+    }
+});
+db.comments.belongsTo(db.videos, { foreignKey: 'comment_table_id', constraints: false });
+
+
 // db.sequelize.sync({ force: true })
 
 module.exports = db

@@ -67,6 +67,8 @@ app.get('/transactionUser', userCtrl.transactionUser)
 
 app.get('/hooks', userCtrl.hooksUser)
 
+app.get('/polymorphicOneTwoMany', userCtrl.polymorphicOneTwoMany)
+
 // User.sync({force: true})
 // User.drop()
 

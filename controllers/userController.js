@@ -661,6 +661,64 @@ const hooksUser = async (req, res) => {
     })
 }
 
+const Image = db.images
+const Video = db.videos
+const Comment = db.comments
+const polymorphicOneTwoMany = async (req, res) => {
+
+    // const Imagedata = await Image.create({ title: "First Image", url: "First Url" })
+    // const Imagedata ={}
+    // const Videodata = await Video.create({ title: "First Video", text: "Awesome Video" })
+
+    // if (Imagedata && Imagedata.id) {
+    //     await Comment.create({
+    //         title: "First Comment for image",
+    //         comment_table_id: Imagedata.id,
+    //         comment_table_type: 'image'
+    //     })
+    // }
+    // if (Videodata && Videodata.id) {
+    //     await Comment.create({
+    //         title: "First Comment for video",
+    //         comment_table_id: Videodata.id,
+    //         comment_table_type: 'video'
+    //     })
+    // }
+
+
+    //-----------Fetch Image to Comment----------------
+
+    // const data = await Image.findAll({
+    //     include:{
+    //         model: Comment
+    //     }
+    // })
+
+    // const data = await Comment.findAll({
+    //     include: {
+    //         model: Image
+    //     }
+    // })
+
+    //----------Video to Comment------------
+    // const data = await Video.findAll({
+    //     include: {
+    //         model: Comment
+    //     }
+    // })
+
+    const data = await Comment.findAll({
+        include: {
+            model: Video
+        }
+    })
+
+    res.status(200).json({
+        status: true,
+        data: data
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -684,5 +742,6 @@ module.exports = {
     m2mUser,
     scopesUser,
     transactionUser,
-    hooksUser
+    hooksUser,
+    polymorphicOneTwoMany
 }
