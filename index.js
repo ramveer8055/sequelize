@@ -61,6 +61,12 @@ app.get('/m-n-association', userCtrl.mNAssociationUser)
 
 app.get('/m2mUser', userCtrl.m2mUser)
 
+app.get('/scopesUser', userCtrl.scopesUser)
+
+app.get('/transactionUser', userCtrl.transactionUser)
+
+app.get('/hooks', userCtrl.hooksUser)
+
 // User.sync({force: true})
 // User.drop()
 

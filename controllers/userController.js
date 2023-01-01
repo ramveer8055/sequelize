@@ -470,7 +470,7 @@ const creatorUser = async (req, res) => {
     })
 }
 
-const mNAssociationUser = async(req, res)=>{
+const mNAssociationUser = async (req, res) => {
     //----------------Lazy Loading-------------------------
     // const amidala = await Customer.create({ username: 'p4dm3', points: 1000 });
     // const queen = await Profile.create({ name: 'Queen' });
@@ -494,7 +494,7 @@ const mNAssociationUser = async(req, res)=>{
     //     include: Profile
     // });
 
-    
+
     //-------------Find Query-----------------
     // const result = await Profile.findOne({
     //     where: { name: 'Queen' },
@@ -514,14 +514,14 @@ const mNAssociationUser = async(req, res)=>{
     // });
 
     const data = await db.customers.findOne({
-        
-            include: {
-                model: Profile,
-                through: {
-                    attributes: ['id','self_granted']
-                }
+
+        include: {
+            model: Profile,
+            through: {
+                attributes: ['id', 'self_granted']
             }
-       
+        }
+
     })
 
     res.status(200).json({
@@ -530,7 +530,7 @@ const mNAssociationUser = async(req, res)=>{
     })
 }
 
-const m2mUser = async(req, res)=>{
+const m2mUser = async (req, res) => {
     // const players = await db.players.bulkCreate([
     //     { username: 's0me0ne' },
     //     { username: 'empty' },
@@ -585,7 +585,79 @@ const m2mUser = async(req, res)=>{
 
     res.status(200).json({
         status: true,
-        data: game,  
+        data: game,
+    })
+}
+
+const scopesUser = async (req, res) => {
+    // const data = await User.create({ first_name: "shreyas", last_name: "chauhan", status: 1})
+    User.addScope('checkStatus', {
+        where: {
+            status: true
+        }
+    })
+
+    User.addScope('lastNameCheck', {
+        where: {
+            last_name: 'chauhan, Indian'
+        }
+    })
+
+    User.addScope('includeContact', {
+        include: {
+            model: Contact,
+            attributes: ['current_address']
+        }
+    })
+
+    User.addScope('userAttribute', {
+        attributes: ['first_name']
+    })
+
+    User.addScope('limitApply', {
+        limit: 2
+    })
+
+
+    const data = await User.scope(['checkStatus', 'lastNameCheck', 'includeContact', 'userAttribute', 'limitApply']).findAll({
+
+    })
+    res.status(200).json({
+        status: true,
+        data: data
+    })
+}
+
+
+const transactionUser = async (req, res) => {
+    const t = await db.sequelize.transaction();
+    const data = await User.create({ first_name: 'op', last_name: 'singh' }, { transaction: t })
+    if (data && data.id) {
+        try {
+            await Contact.create({ permanent_address: 'fgh', current_address: 'jkl', user_id: null }, { transaction: t })
+
+            // If the execution reaches this line, no errors were thrown.
+            // We commit the transaction.
+            await t.commit();
+        } catch (error) {
+            // If the execution reaches this line, an error was thrown.
+            // We rollback the transaction.
+            await t.rollback();
+        }
+    }
+
+
+    res.status(200).json({
+        status: true,
+        data: data
+    })
+}
+
+const hooksUser = async (req, res) => {
+    const user = await User.create({ first_name: "mohan", last_name: "a", status: 1 })
+    res.status(200).json({
+        status: true,
+        data: user
     })
 }
 
@@ -609,5 +681,8 @@ module.exports = {
     eagerUser,
     creatorUser,
     mNAssociationUser,
-    m2mUser
+    m2mUser,
+    scopesUser,
+    transactionUser,
+    hooksUser
 }

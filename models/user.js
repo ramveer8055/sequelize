@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes, Model) => {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
-            validate:{
+            validate: {
                 isAlpha: {
                     msg: "Only alphabet allowed"
-                },  
+                },
                 isLowercase: true,
                 len: [2, 10],
             },
@@ -38,8 +38,18 @@ module.exports = (sequelize, DataTypes, Model) => {
             set(value) {
                 throw new Error('Do not try to set the `fullName` value!');
             }
-        }
+        },
+        status: DataTypes.BOOLEAN
     }, {
+        // Method 1 via the .init() method
+        // hooks: {
+        //     beforeValidate: (user, options) => {
+        //         user.last_name = 'happy';
+        //     },
+        //     afterValidate: (user, options) => {
+        //         user.status = 1;
+        //     }
+        // },
         // Other model options go here
         sequelize, // We need to pass the connection instance
         modelName: 'User', // We need to choose the model name
@@ -80,6 +90,29 @@ module.exports = (sequelize, DataTypes, Model) => {
     // // `sequelize.define` also returns the model
     // console.log(User === sequelize.models.User); // true
 
+
+    // Method 2 via the .addHook() method
+    // User.addHook('beforeValidate', (user, options) => {
+    //     user.last_name = 'happy';
+    // });
+
+    // User.addHook('afterValidate', 'someCustomName', (user, options) => {
+    //     user.status = 1
+    // });
+
+
+    // Method 3 via the direct method
+    User.beforeValidate(async (user, options) => {
+        user.last_name = 'rocky';
+    });
+
+    User.afterValidate('myHookAfter', (user, options) => {
+        user.status = 0;
+    });
+
+    // User.removeHook('beforeValidate', 'myHookAfter');
+
+    // User.removeHook()
 
     return User
 
