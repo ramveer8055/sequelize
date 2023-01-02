@@ -73,6 +73,8 @@ app.get('/polymorphicManyTwoMany', userCtrl.polymorphicManyTwoMany)
 
 app.get('/queryInterfaceUser', userCtrl.queryInterfaceUser)
 
+app.get('/sub-query', userCtrl.subQueryUser)
+
 // User.sync({force: true})
 // User.drop()
 

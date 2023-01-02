@@ -4,7 +4,13 @@ const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = new Sequelize('testDB', 'root', 'admin@123', {
     host: 'localhost',
     dialect: 'mysql' /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
-    // logging: false
+    // logging: false,
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    }
 });
 
 
@@ -87,10 +93,10 @@ db.game_team = sequelize.define('game_team', {
         autoIncrement: true,
         allowNull: false
     },
-    game_id:{
+    game_id: {
         type: DataTypes.INTEGER
     },
-    team_id:{
+    team_id: {
         type: DataTypes.INTEGER
     }
 
@@ -112,10 +118,10 @@ db.player_game_team = sequelize.define('player_game_team', {
         autoIncrement: true,
         allowNull: false
     },
-    player_id:{
+    player_id: {
         type: DataTypes.INTEGER,
     },
-    game_team_id:{
+    game_team_id: {
         type: DataTypes.INTEGER,
     }
 }, { underscored: true });
@@ -154,8 +160,8 @@ db.videos.hasMany(db.comments, {
 db.comments.belongsTo(db.videos, { foreignKey: 'comment_table_id', constraints: false });
 
 //------------Polymorphic Associations -One to many--------------
-db.tags = require('./tag')(sequelize,DataTypes,Model)
-db.tag_taggables = require('./tag_taggable')(sequelize,DataTypes,Model)
+db.tags = require('./tag')(sequelize, DataTypes, Model)
+db.tag_taggables = require('./tag_taggable')(sequelize, DataTypes, Model)
 
 db.images.belongsToMany(db.tags, {
     through: {
@@ -202,7 +208,23 @@ db.tags.belongsToMany(db.videos, {
 
 
 
-db.DataTypes =DataTypes
+db.DataTypes = DataTypes
 // db.sequelize.sync({ force: true })
+
+
+
+
+//------------Sub Queries--------------------
+db.posts = sequelize.define('post', {
+    content: DataTypes.STRING
+}, { timestamps: false, underscored: true, });
+
+db.reactions = sequelize.define('reaction', {
+    type: DataTypes.STRING,
+    post_id: DataTypes.INTEGER
+}, { timestamps: false, underscored: true, });
+
+db.posts.hasMany(db.reactions);
+db.reactions.belongsTo(db.posts);
 
 module.exports = db

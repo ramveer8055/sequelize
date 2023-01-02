@@ -798,6 +798,53 @@ const queryInterfaceUser = async (req, res) => {
     })
 }
 
+
+
+async function makePostWithReactions(content, reactionTypes) {
+    const post = await db.posts.create({ content });
+    await db.reactions.bulkCreate(
+        reactionTypes.map(type => ({ type, post_id: post.id }))
+    );
+    return post;
+}
+
+const subQueryUser = async (req, res) => {
+
+    // const data = await makePostWithReactions('Hello World', [
+    //     'Like', 'Angry', 'Laugh', 'Like', 'Like', 'Angry', 'Sad', 'Like'
+    // ]);
+    // await makePostWithReactions('My Second Post', [
+    //     'Laugh', 'Laugh', 'Like', 'Laugh'
+    // ]);
+
+    const data = await db.posts.findAll({
+        attributes: {
+            include: [
+                [
+                    // Note the wrapping parentheses in the call below!
+                    db.sequelize.literal(`(
+                    SELECT COUNT(*)
+                    FROM reactions AS reaction
+                    WHERE
+                        reaction.post_id = post.id
+                        AND
+                        reaction.type = "Laugh"
+                )`),
+                    'laughReactionsCount'
+                ]
+            ]
+        },
+        order: [
+            [db.sequelize.literal('laughReactionsCount'), 'DESC']
+        ]
+    });
+
+    res.status(200).json({
+        status: true,
+        data: data
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -824,5 +871,6 @@ module.exports = {
     hooksUser,
     polymorphicOneTwoMany,
     polymorphicManyTwoMany,
-    queryInterfaceUser
+    queryInterfaceUser,
+    subQueryUser
 }
