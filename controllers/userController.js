@@ -751,11 +751,50 @@ const polymorphicManyTwoMany = async (req, res) => {
     // })
 
     const data = await Tag.findAll({
-        include: [Image,Video]
+        include: [Image, Video]
     })
     res.status(200).json({
         status: true,
         data: data
+    })
+}
+
+const queryInterfaceUser = async (req, res) => {
+    const queryInterface = db.sequelize.getQueryInterface();
+
+    //---------------------Creating a table----------------------
+
+    // queryInterface.createTable('Person', {
+    //     name: db.DataTypes.STRING,
+    //     isBetaMember: {
+    //         type: db.DataTypes.BOOLEAN,
+    //         defaultValue: false,
+    //         allowNull: false
+    //     }
+    // });
+
+
+    //--------------Adding a column to a table-------------------
+    // queryInterface.addColumn('Person', 'petName', { type: db.DataTypes.STRING });
+    // res.status(200).json({
+    //     status: true,
+    //     data: 'data'
+    // })
+
+
+    //--------------Changing the datatype of a column---------------
+    // queryInterface.changeColumn('Person', 'petName', {
+    //     type: db.DataTypes.FLOAT,
+    //     defaultValue: 3.14,
+    //     allowNull: false
+    // });
+
+    //--------Removing a column------------------
+    queryInterface.removeColumn('Person', 'petName', { /* query options */ });
+
+    res.status(200).json({
+        status: true,
+        data: 'data'
     })
 }
 
@@ -784,5 +823,6 @@ module.exports = {
     transactionUser,
     hooksUser,
     polymorphicOneTwoMany,
-    polymorphicManyTwoMany
+    polymorphicManyTwoMany,
+    queryInterfaceUser
 }

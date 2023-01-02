@@ -202,7 +202,7 @@ db.tags.belongsToMany(db.videos, {
 
 
 
-
+db.DataTypes =DataTypes
 // db.sequelize.sync({ force: true })
 
 module.exports = db

@@ -71,6 +71,8 @@ app.get('/polymorphicOneTwoMany', userCtrl.polymorphicOneTwoMany)
 
 app.get('/polymorphicManyTwoMany', userCtrl.polymorphicManyTwoMany)
 
+app.get('/queryInterfaceUser', userCtrl.queryInterfaceUser)
+
 // User.sync({force: true})
 // User.drop()
 
