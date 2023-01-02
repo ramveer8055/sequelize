@@ -69,6 +69,8 @@ app.get('/hooks', userCtrl.hooksUser)
 
 app.get('/polymorphicOneTwoMany', userCtrl.polymorphicOneTwoMany)
 
+app.get('/polymorphicManyTwoMany', userCtrl.polymorphicManyTwoMany)
+
 // User.sync({force: true})
 // User.drop()
 

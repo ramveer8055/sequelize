@@ -719,6 +719,46 @@ const polymorphicOneTwoMany = async (req, res) => {
     })
 }
 
+const Tag = db.tags
+const TagTaggable = db.tag_taggables
+const polymorphicManyTwoMany = async (req, res) => {
+    // const Imagedata ={}
+    // const Imagedata = await Image.create({ title: "second Image", url: "First Url" })
+    // const Videodata = await Video.create({ title: "second Video", text: "Awesome Video" })
+    // const Tagdata = await Tag.create({ name: "react js" })
+
+    // if (Tagdata && Tagdata.id && Imagedata && Imagedata.id) {
+    //     await TagTaggable.create({
+    //         tag_id: Tagdata.id,
+    //         taggable_id: Imagedata.id,
+    //         taggable_type: 'image'
+    //     })
+    // }
+    // if (Tagdata && Tagdata.id && Videodata && Videodata.id) {
+    //     await TagTaggable.create({
+    //         tag_id: Tagdata.id,
+    //         taggable_id: Videodata.id,
+    //         taggable_type: 'video'
+    //     })
+    // }
+
+    // const data = await Image.findAll({
+    //     include: Tag
+    // })
+
+    // const data = await Video.findAll({
+    //     include: Tag
+    // })
+
+    const data = await Tag.findAll({
+        include: [Image,Video]
+    })
+    res.status(200).json({
+        status: true,
+        data: data
+    })
+}
+
 module.exports = {
     addUser,
     getUsers,
@@ -743,5 +783,6 @@ module.exports = {
     scopesUser,
     transactionUser,
     hooksUser,
-    polymorphicOneTwoMany
+    polymorphicOneTwoMany,
+    polymorphicManyTwoMany
 }

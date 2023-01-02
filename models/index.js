@@ -153,6 +153,55 @@ db.videos.hasMany(db.comments, {
 });
 db.comments.belongsTo(db.videos, { foreignKey: 'comment_table_id', constraints: false });
 
+//------------Polymorphic Associations -One to many--------------
+db.tags = require('./tag')(sequelize,DataTypes,Model)
+db.tag_taggables = require('./tag_taggable')(sequelize,DataTypes,Model)
+
+db.images.belongsToMany(db.tags, {
+    through: {
+        model: db.tag_taggables,
+        unique: false,
+        scope: {
+            taggable_type: 'image'
+        }
+    },
+    foreignKey: 'taggable_id',
+    constraints: false
+});
+
+
+db.tags.belongsToMany(db.images, {
+    through: {
+        model: db.tag_taggables,
+        unique: false
+    },
+    foreignKey: 'tagId',
+    constraints: false
+});
+
+
+db.videos.belongsToMany(db.tags, {
+    through: {
+        model: db.tag_taggables,
+        unique: false,
+        scope: {
+            taggable_type: 'video'
+        }
+    },
+    foreignKey: 'taggable_id',
+    constraints: false
+});
+db.tags.belongsToMany(db.videos, {
+    through: {
+        model: db.tag_taggables,
+        unique: false
+    },
+    foreignKey: 'tag_id',
+    constraints: false
+});
+
+
+
 
 // db.sequelize.sync({ force: true })
 
